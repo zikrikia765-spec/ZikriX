@@ -1,0 +1,1340 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>QuizMaker by Zikri</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--bg1:#0f0c29;--bg2:#302b63;--bg3:#24243e;--accent:#a855f7;--accent2:#ec4899;--accent3:#22d3ee;--card:rgba(255,255,255,.06);--border:rgba(255,255,255,.12);--text:#fff;--muted:rgba(255,255,255,.6)}
+body[data-theme="sunset"]{--bg1:#3d1a1a;--bg2:#7c2d12;--bg3:#451a03;--accent:#f97316;--accent2:#ef4444;--accent3:#fbbf24}
+body[data-theme="ocean"]{--bg1:#082f49;--bg2:#0c4a6e;--bg3:#0e7490;--accent:#06b6d4;--accent2:#3b82f6;--accent3:#67e8f9}
+body[data-theme="forest"]{--bg1:#052e16;--bg2:#14532d;--bg3:#166534;--accent:#22c55e;--accent2:#84cc16;--accent3:#a3e635}
+body[data-theme="neon"]{--bg1:#0a0a0a;--bg2:#171717;--bg3:#262626;--accent:#22d3ee;--accent2:#ec4899;--accent3:#a855f7}
+body[data-theme="mono"]{--bg1:#0a0a0a;--bg2:#1c1c1c;--bg3:#262626;--accent:#e5e5e5;--accent2:#a3a3a3;--accent3:#737373}
+html,body{min-height:100%}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:linear-gradient(135deg,var(--bg1),var(--bg2),var(--bg3));background-attachment:fixed;color:var(--text);min-height:100vh;overflow-x:hidden;line-height:1.5;padding-bottom:env(safe-area-inset-bottom)}
+#errBanner{display:none;position:fixed;top:0;left:0;right:0;background:#dc2626;color:#fff;padding:10px 14px;font-size:12px;font-weight:700;z-index:9999;box-shadow:0 4px 12px rgba(0,0,0,.5)}
+#errBanner.show{display:block}
+.screen{display:none;position:relative;z-index:1;min-height:100vh;padding:24px 16px 90px}
+.screen.active{display:block}
+.wrap{max-width:600px;margin:0 auto}
+h1{font-size:clamp(26px,6vw,38px);font-weight:800;line-height:1.15}
+h2{font-size:clamp(19px,4.5vw,24px);font-weight:700}
+.sub{color:var(--muted);font-size:15px;margin-top:10px}
+.grad{background:linear-gradient(120deg,var(--accent),var(--accent2),var(--accent3));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.brand{position:fixed;top:14px;right:14px;z-index:50;font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:7px 13px;border-radius:99px;background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.15);color:#fff}
+.brand span{background:linear-gradient(120deg,var(--accent),var(--accent2),var(--accent3));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:15px 22px;border:none;border-radius:16px;font-family:inherit;font-size:16px;font-weight:700;cursor:pointer;text-decoration:none;color:#fff;transition:transform .1s,opacity .15s}
+.btn:active{transform:scale(.97);opacity:.9}
+.btn-primary{background:linear-gradient(120deg,var(--accent),var(--accent2))}
+.btn-primary:disabled{opacity:.6;cursor:wait}
+.btn-ghost{background:var(--card);border:1px solid var(--border)}
+.btn-sm{padding:10px 15px;font-size:14px;border-radius:12px;width:auto}
+.btn-row{display:flex;gap:10px;flex-wrap:wrap}
+.btn-row .btn{flex:1;min-width:120px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:20px}
+.card+.card{margin-top:14px}
+.inp{width:100%;padding:14px 16px;border-radius:14px;background:rgba(0,0,0,.25);border:1px solid var(--border);color:#fff;font-family:inherit;font-size:15px;font-weight:500;outline:none}
+.inp::placeholder{color:rgba(255,255,255,.35)}
+.inp:focus{border-color:var(--accent)}
+textarea.inp{resize:vertical;min-height:70px}
+.label{display:block;font-size:13px;font-weight:700;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em}
+.field{margin-bottom:16px}
+.hero{text-align:center;padding-top:6vh}
+.logo{font-size:60px;line-height:1;margin-bottom:18px}
+.hero .btn{margin-top:12px}
+.byline{margin-top:12px;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.byline b{background:linear-gradient(120deg,var(--accent),var(--accent2),var(--accent3));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.features{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:32px}
+.feat{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 8px}
+.feat .ico{font-size:22px;margin-bottom:5px}
+.feat .t{font-size:11px;font-weight:700;color:var(--muted)}
+.nav{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.nav .back{width:42px;height:42px;border-radius:12px;border:1px solid var(--border);background:var(--card);color:#fff;font-size:18px;cursor:pointer;display:grid;place-items:center;flex-shrink:0}<style>
+.theme-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+.theme-dot{aspect-ratio:1;border-radius:12px;cursor:pointer;border:2px solid transparent;position:relative}
+.theme-dot.active{border-color:#fff;box-shadow:0 0 0 2px rgba(255,255,255,.15)}
+.theme-dot::after{content:'✓';position:absolute;inset:0;display:grid;place-items:center;color:#fff;font-weight:800;font-size:15px;opacity:0;text-shadow:0 2px 6px rgba(0,0,0,.6)}
+.theme-dot.active::after{opacity:1}
+.t-purple{background:linear-gradient(135deg,#a855f7,#ec4899,#22d3ee)}
+.t-sunset{background:linear-gradient(135deg,#f97316,#ef4444,#fbbf24)}
+.t-ocean{background:linear-gradient(135deg,#06b6d4,#3b82f6,#67e8f9)}
+.t-forest{background:linear-gradient(135deg,#22c55e,#84cc16,#a3e635)}
+.t-neon{background:linear-gradient(135deg,#22d3ee,#ec4899,#a855f7)}
+.t-mono{background:linear-gradient(135deg,#e5e5e5,#a3a3a3,#737373)}
+.qcard{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:12px}
+.qhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.qhead .num{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--accent3)}
+.btn-x{width:30px;height:30px;border-radius:9px;border:1px solid rgba(239,68,68,.35);background:rgba(239,68,68,.12);color:#fca5a5;cursor:pointer;font-size:14px;display:grid;place-items:center}
+.opts{margin-top:10px;display:flex;flex-direction:column;gap:8px}
+.opt-row{display:flex;gap:8px;align-items:center}
+.check{width:40px;height:44px;flex-shrink:0;border-radius:12px;border:1px solid var(--border);background:rgba(0,0,0,.25);color:rgba(255,255,255,.3);cursor:pointer;font-size:16px;font-weight:800;display:grid;place-items:center}
+.check.active{background:linear-gradient(120deg,#22c55e,#16a34a);color:#fff;border-color:transparent}
+.opt-row .inp{padding:12px 14px;font-size:14px}
+.hint{font-size:12px;color:var(--muted);margin-top:6px;text-align:center}
+.img-tools{display:flex;gap:8px;margin-top:10px}
+.img-btn{flex:1;padding:10px 12px;border-radius:11px;border:1px dashed rgba(255,255,255,.25);background:rgba(255,255,255,.03);color:var(--muted);font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;text-align:center}
+.img-btn.has{border-style:solid;border-color:rgba(34,197,94,.5);color:#4ade80;background:rgba(34,197,94,.08)}
+.img-preview{position:relative;margin-top:10px;border-radius:14px;overflow:hidden;border:1px solid var(--border);background:rgba(0,0,0,.3)}
+.img-preview img{width:100%;display:block;max-height:220px;object-fit:cover}
+.img-preview .rm{position:absolute;top:8px;right:8px;width:32px;height:32px;border-radius:10px;border:none;background:rgba(0,0,0,.65);color:#fff;cursor:pointer;font-size:15px;display:grid;place-items:center}
+.q-img{margin-bottom:16px;border-radius:14px;overflow:hidden;border:1px solid var(--border);background:rgba(0,0,0,.25)}
+.q-img img{width:100%;display:block;max-height:320px;object-fit:contain}
+.progress-wrap{margin-bottom:20px}
+.progress-top{display:flex;justify-content:space-between;font-size:13px;font-weight:700;color:var(--muted);margin-bottom:10px;align-items:center;gap:8px}
+.progress-bar{height:8px;border-radius:99px;background:rgba(255,255,255,.1);overflow:hidden}
+.progress-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--accent),var(--accent2),var(--accent3));transition:width .4s ease}
+.combo-tag{font-weight:800;padding:3px 10px;border-radius:99px;background:linear-gradient(120deg,#f97316,#ef4444);font-size:12px;letter-spacing:.05em;text-transform:uppercase}
+.q-text{font-size:clamp(18px,4.4vw,23px);font-weight:700;line-height:1.35;margin-bottom:20px}
+.choices{display:flex;flex-direction:column;gap:10px}
+.choice{display:flex;align-items:center;gap:14px;padding:16px;border-radius:15px;border:1px solid var(--border);background:var(--card);cursor:pointer;text-align:left;color:#fff;font-family:inherit;font-size:15px;font-weight:600;width:100%}
+.choice .badge{width:30px;height:30px;flex-shrink:0;border-radius:9px;background:rgba(255,255,255,.08);border:1px solid var(--border);display:grid;place-items:center;font-weight:800;font-size:13px}
+.choice.correct{background:linear-gradient(120deg,rgba(34,197,94,.35),rgba(22,163,74,.25));border-color:#22c55e}
+.choice.correct .badge{background:linear-gradient(120deg,#22c55e,#16a34a);border-color:transparent}
+.choice.wrong{background:linear-gradient(120deg,rgba(239,68,68,.3),rgba(220,38,38,.2));border-color:#ef4444}
+.choice.wrong .badge{background:linear-gradient(120deg,#ef4444,#dc2626);border-color:transparent}
+.choice.locked{pointer-events:none}
+.fx-emoji{position:fixed;font-size:46px;pointer-events:none;z-index:999;transition:transform 1s ease-out,opacity 1s ease-out}
+.result-head{text-align:center;padding:8px 0 24px}
+.score-circle{width:160px;height:160px;border-radius:50%;margin:0 auto 20px;background:conic-gradient(from -90deg,var(--accent) var(--p),rgba(255,255,255,.08) 0);display:grid;place-items:center;position:relative}
+.score-circle::before{content:'';position:absolute;inset:12px;border-radius:50%;background:var(--bg1)}
+.score-inner{position:relative;z-index:1;text-align:center}
+.score-num{font-size:40px;font-weight:800;line-height:1}
+.score-lbl{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-top:4px}
+.verdict-emoji{font-size:52px;line-height:1;margin-bottom:8px}
+.verdict-title{font-size:22px;font-weight:800;margin-bottom:6px}
+.verdict-desc{color:var(--muted);font-size:14px;max-width:420px;margin:0 auto}
+.review-item{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.07);font-size:14px}
+.review-item:last-child{border-bottom:none}
+.review-item .mark{width:24px;height:24px;flex-shrink:0;border-radius:8px;display:grid;place-items:center;font-size:13px;font-weight:800;margin-top:1px}
+.mark.ok{background:rgba(34,197,94,.18);color:#4ade80}
+.mark.no{background:rgba(239,68,68,.18);color:#f87171}
+.review-item .rq{font-weight:600;margin-bottom:3px}
+.review-item .ra{color:var(--muted);font-size:13px}
+.lb-row{display:flex;align-items:center;gap:12px;padding:11px 13px;border-radius:13px;background:rgba(255,255,255,.04);border:1px solid var(--border);margin-bottom:7px}
+.lb-row.me{background:linear-gradient(120deg,rgba(168,85,247,.2),rgba(236,72,153,.15));border-color:var(--accent)}
+.lb-rank{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;font-weight:800;font-size:14px;background:rgba(255,255,255,.08);flex-shrink:0}
+.lb-rank.g1{background:linear-gradient(120deg,#fbbf24,#f59e0b);color:#000}
+.lb-rank.g2{background:linear-gradient(120deg,#cbd5e1,#94a3b8);color:#000}
+.lb-rank.g3{background:linear-gradient(120deg,#d97706,#b45309)}
+.lb-name{flex:1;font-weight:700;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lb-score{font-weight:800;font-size:15px}
+.lb-meta{font-size:11px;color:var(--muted);font-weight:600}
+.spinner{width:22px;height:22px;border-radius:50%;border:3px solid rgba(255,255,255,.15);border-top-color:var(--accent);animation:spin .8s linear infinite;margin:14px auto}
+@keyframes spin{to{transform:rotate(360deg)}}
+.link-box{display:flex;gap:8px;background:rgba(0,0,0,.3);border:1px solid var(--border);border-radius:14px;padding:6px 6px 6px 16px;align-items:center;margin-bottom:12px}
+.link-box input{flex:1;background:none;border:none;color:#fff;font-family:inherit;font-size:13px;outline:none;min-width:0}
+.preview-card{border-radius:20px;padding:24px 20px;text-align:center;background:linear-gradient(135deg,rgba(168,85,247,.22),rgba(236,72,153,.16));border:1px solid rgba(168,85,247,.3);margin-bottom:16px}
+.preview-card .ptitle{font-size:22px;font-weight:800;margin-bottom:6px}
+.preview-card .pmeta{font-size:13px;color:var(--muted)}
+.preview-card .pemoji{font-size:42px;margin-bottom:10px;display:block}
+.toast{position:fixed;bottom:100px;left:50%;transform:translate(-50%,200px);background:linear-gradient(120deg,#22c55e,#16a34a);color:#fff;padding:13px 24px;border-radius:14px;font-weight:700;font-size:14px;z-index:998;pointer-events:none;opacity:0;visibility:hidden;max-width:calc(100vw - 32px);text-align:center;transition:transform .3s,opacity .25s,visibility .25s}
+.toast.show{transform:translate(-50%,0);opacity:1;visibility:visible}
+.center{text-align:center}
+.mt{margin-top:18px}
+.banner{background:rgba(34,211,238,.1);border:1px solid rgba(34,211,238,.3);border-radius:14px;padding:12px 16px;font-size:13px;color:#a5f3fc;margin-bottom:14px}
+.banner.ok{background:rgba(34,197,94,.12);border-color:rgba(34,197,94,.4);color:#86efac}
+.banner.err{background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.4);color:#fca5a5}
+.an-stat-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px}
+.an-stat{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 10px;text-align:center}
+.an-stat .n{font-size:22px;font-weight:800;line-height:1;color:var(--accent3)}
+.an-stat .l{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-top:5px}
+.an-row{background:var(--card);border:1px solid var(--border);border-radius:16px;margin-bottom:10px;overflow:hidden}
+.an-row.open{border-color:var(--accent)}
+.an-head{display:flex;align-items:center;gap:12px;padding:14px;cursor:pointer}
+.an-rank{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;font-weight:800;font-size:14px;background:rgba(255,255,255,.08);flex-shrink:0}
+.an-rank.g1{background:linear-gradient(120deg,#fbbf24,#f59e0b);color:#000}
+.an-rank.g2{background:linear-gradient(120deg,#cbd5e1,#94a3b8);color:#000}
+.an-rank.g3{background:linear-gradient(120deg,#d97706,#b45309)}
+.an-name{flex:1;font-weight:700;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.an-name .sub{font-size:11px;color:var(--muted);font-weight:600;margin-top:2px}
+.an-score{font-weight:800;font-size:16px;color:var(--accent3)}
+.an-arrow{color:var(--muted);font-size:11px;transition:transform .25s;margin-left:6px}
+.an-row.open .an-arrow{transform:rotate(180deg)}
+.an-body{max-height:0;overflow:hidden;transition:max-height .3s ease;padding:0 14px}
+.an-row.open .an-body{max-height:3000px;padding-bottom:14px}
+.an-btn{padding:8px 12px;border-radius:10px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;border:1px solid var(--border);background:rgba(255,255,255,.06);color:#fff;display:inline-flex;align-items:center;gap:5px;margin-bottom:10px}
+.an-btn.danger{border-color:rgba(239,68,68,.4);background:rgba(239,68,68,.15);color:#fca5a5}
+.an-qa{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:13px}
+.an-qa:last-child{border-bottom:none}
+.an-qa .mk{width:20px;height:20px;flex-shrink:0;border-radius:6px;display:grid;place-items:center;font-size:11px;font-weight:800;margin-top:2px}
+.an-qa.ok .mk{background:rgba(34,197,94,.2);color:#4ade80}
+.an-qa.no .mk{background:rgba(239,68,68,.2);color:#f87171}
+.an-qa .q{font-weight:600;margin-bottom:3px;line-height:1.3}
+.an-qa .a{color:var(--muted);font-size:12px;line-height:1.4}
+.qstat{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:12px;padding:11px 13px;margin-bottom:8px}
+.qstat .qt{font-size:12px;font-weight:700;margin-bottom:5px}
+.qstat .qb{height:6px;border-radius:99px;background:rgba(255,255,255,.1);overflow:hidden;margin-bottom:5px}
+.qstat .qf{height:100%;border-radius:99px;background:#ef4444}
+.qstat .qd{font-size:11px;color:var(--muted);font-weight:600}
+.empty-state{text-align:center;padding:40px 20px;color:var(--muted)}
+.empty-state .e{font-size:48px;margin-bottom:12px;display:block}
+.music-wrap{position:fixed;bottom:18px;right:16px;z-index:60;display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+.music-btn,.music-pick{width:52px;height:52px;border-radius:50%;border:1px solid rgba(255,255,255,.15);background:rgba(0,0,0,.6);color:#fff;cursor:pointer;display:grid;place-items:center}
+.music-btn{font-size:22px}
+.music-pick{font-size:20px}
+.music-btn.playing{background:linear-gradient(120deg,var(--accent),var(--accent2))}
+.music-panel{position:fixed;bottom:82px;right:16px;z-index:65;background:rgba(20,15,45,.96);border:1px solid var(--border);border-radius:16px;padding:12px;min-width:230px;display:none}
+.music-panel.open{display:block}
+.music-panel h4{font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;padding:0 4px}
+.song-opt{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:11px;cursor:pointer;font-size:13px;font-weight:600;color:#fff;width:100%;border:none;background:none;font-family:inherit;text-align:left}
+.song-opt.active{background:linear-gradient(120deg,rgba(168,85,247,.3),rgba(236,72,153,.2))}
+.song-opt .sdot{width:8px;height:8px;border-radius:50%;background:var(--muted);flex-shrink:0}
+.song-opt.active .sdot{background:#22c55e}
+.song-opt .sname{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@media(max-width:480px){.screen{padding:18px 14px 90px}.card{padding:18px;border-radius:18px}.brand{top:10px;right:10px;font-size:10px;padding:6px 11px}}
+</style>
+</head>
+<body>
+<div id="errBanner"></div>
+<div class="brand">by <span>Zikri</span></div>
+
+<audio id="bgm" loop preload="none"></audio>
+
+<div class="music-wrap">
+  <button class="music-pick" id="btnMusicPick" title="Pilih Lagu">🎶</button>
+  <button class="music-btn" id="musicBtn" title="Play/Pause">🎵</button>
+</div>
+<div class="music-panel" id="musicPanel">
+  <h4>Pilih Lagu</h4>
+  <div id="songList"></div>
+</div>
+
+<!-- HOME -->
+<div class="screen active" id="screen-home">
+  <div class="wrap hero">
+    <div class="logo">🧩</div>
+    <h1>Buat <span class="grad">Kuis Kamu</span><br>Sendiri</h1>
+    <p class="sub">Kuis dengan foto, musik, combo & leaderboard global 🌐</p>
+    <p class="byline">by <b>Zikri</b></p>
+    <button class="btn btn-primary" id="btnStart">✨ Mulai Buat Kuis</button>
+    <button class="btn btn-ghost" id="btnDemo">👀 Coba Kuis Contoh (5 soal)</button>
+    <div class="features">
+      <div class="feat"><div class="ico">📊</div><div class="t">Lihat Peserta</div></div>
+      <div class="feat"><div class="ico">🔥</div><div class="t">Combo Streak</div></div>
+      <div class="feat"><div class="ico">🎨</div><div class="t">Pilih Tema</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="screen" id="screen-builder">
+  <div class="wrap">
+    <div class="nav">
+      <button class="back" id="btnBackHome">←</button>
+      <h2>Dashboard Pembuat</h2>
+    </div>
+    <div id="fb-status"></div>
+    <div class="banner ok">💡 Klik <b>"Isi Contoh Soal"</b> biar langsung ada 5 pertanyaan. Bisa diedit.</div>
+    <div class="card">
+      <div class="field">
+        <label class="label">Judul Kuis</label>
+        <input class="inp" id="in-title" placeholder="Contoh: Seberapa kenal kamu sama aku?">
+      </div>
+      <div class="field">
+        <label class="label">Nama Kamu</label>
+        <input class="inp" id="in-creator" placeholder="Nama kamu (buat leaderboard)">
+      </div>
+      <div class="field">
+        <label class="label">Deskripsi (opsional)</label>
+        <textarea class="inp" id="in-desc" placeholder="Tulis pesan singkat..."></textarea>
+      </div>
+      <div class="field" style="margin-bottom:0">
+        <label class="label">Tema Warna</label>
+        <div class="theme-grid" id="themeGrid"></div>
+      </div>
+    </div>
+    <div style="margin:20px 0 12px;display:flex;justify-content:space-between;align-items:center">
+      <h2 style="font-size:18px">Pertanyaan</h2>
+      <span class="hint" style="margin:0">✓ = tandai benar</span>
+    </div>
+    <div id="questionsWrap"></div>
+    <button class="btn btn-ghost" id="btnFillEx" style="margin-bottom:10px;color:#86efac;border-color:rgba(34,197,94,.4)">🎯 Isi Contoh Soal (5 pertanyaan)</button>
+    <button class="btn btn-ghost" id="btnAddQ" style="margin-bottom:12px">＋ Tambah Pertanyaan Sendiri</button>
+    <button class="btn btn-primary" id="genBtn">🚀 Buat Link Kuis</button>
+    <button class="btn btn-ghost" id="btnAnalytics" style="margin-top:10px">📊 Lihat Peserta & Leaderboard</button>
+  </div>
+</div>
+
+<!-- ANALYTICS -->
+<div class="screen" id="screen-analytics">
+  <div class="wrap">
+    <div class="nav">
+      <button class="back" id="btnBackBuilder2">←</button>
+      <h2>Peserta Kuis</h2>
+    </div>
+    <div class="banner ok">📊 Lihat siapa yang main, skornya, jawaban mana yang salah.</div>
+    <div id="an-stats"></div>
+    <div id="an-questions"></div>
+    <div id="an-list"><div class="spinner"></div></div>
+  </div>
+</div>
+
+<!-- SHARE -->
+<div class="screen" id="screen-share">
+  <div class="wrap">
+    <div class="nav">
+      <button class="back" id="btnBackBuilder3">←</button>
+      <h2>Link Siap Dikirim!</h2>
+    </div>
+    <div class="preview-card">
+      <span class="pemoji">🎉</span>
+      <div class="ptitle" id="pv-title">Judul Kuis</div>
+      <div class="pmeta" id="pv-meta">oleh Kamu • 0 pertanyaan</div>
+    </div>
+    <div class="card">
+      <div id="share-status"></div>
+      <label class="label">Link Kuis</label>
+      <div class="link-box">
+        <input id="share-link" readonly>
+        <button class="btn btn-primary btn-sm" id="btnCopy">Salin</button>
+      </div>
+      <div class="btn-row">
+        <a class="btn btn-ghost" id="wa-btn" target="_blank" rel="noopener">💬 WhatsApp</a>
+        <button class="btn btn-ghost" id="btnTest">👁️ Coba Kuis</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- INPUT NAMA -->
+<div class="screen" id="screen-name">
+  <div class="wrap hero">
+    <div class="logo">👋</div>
+    <h1>Halo! Siapa <span class="grad">Namamu?</span></h1>
+    <p class="sub" id="name-quiz-title">Kuis: —</p>
+    <div class="card" style="margin-top:24px;text-align:left">
+      <label class="label">Nama Kamu</label>
+      <input class="inp" id="player-name" placeholder="Tulis namamu..." maxlength="24">
+      <p class="hint" style="text-align:left;margin-top:8px">Namamu akan muncul di leaderboard global.</p>
+      <button class="btn btn-primary mt" id="btnStartPlay">▶️ Mulai Kuis</button>
+    </div>
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div class="screen" id="screen-quiz">
+  <div class="wrap">
+    <div class="progress-wrap">
+      <div class="progress-top">
+        <span id="pg-label">Soal 1</span>
+        <span id="combo-slot"></span>
+        <span id="pg-pct">0%</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="pg-fill" style="width:0%"></div></div>
+    </div>
+    <div class="card">
+      <div style="font-size:13px;color:var(--muted);font-weight:700;margin-bottom:8px" id="quiz-by">oleh —</div>
+      <div id="q-img-wrap"></div>
+      <div class="q-text" id="q-text">Pertanyaan...</div>
+      <div class="choices" id="q-choices"></div>
+      <button class="btn btn-primary mt" id="next-btn" style="display:none">Lanjut →</button>
+    </div>
+  </div>
+</div>
+
+<!-- RESULT -->
+<div class="screen" id="screen-result">
+  <div class="wrap">
+    <div class="result-head">
+      <div class="score-circle" id="score-circle" style="--p:0%">
+        <div class="score-inner">
+          <div class="score-num" id="score-num">0</div>
+          <div class="score-lbl">Skor</div>
+        </div>
+      </div>
+      <div class="verdict-emoji" id="vd-emoji">🎯</div>
+      <div class="verdict-title" id="vd-title">Hasil</div>
+      <div class="verdict-desc" id="vd-desc"></div>
+    </div>
+    <div class="card" style="margin-bottom:14px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:8px">
+        <h2 style="font-size:18px">🏆 Leaderboard Global</h2>
+        <button class="btn btn-ghost btn-sm" id="btnRefreshLB">🔄</button>
+      </div>
+      <div id="lb-list"><div class="spinner"></div></div>
+      <p class="hint" style="margin-top:8px" id="lb-note"></p>
+    </div>
+    <div class="card" id="review"></div>
+    <div class="<script>
+/* ===== ERROR HANDLER — biar keliatan kalau ada bug ===== */
+function showError(msg){
+  var b = document.getElementById('errBanner');
+  if (!b) return;
+  b.textContent = '⚠️ ' + msg;
+  b.classList.add('show');
+  setTimeout(function(){ b.classList.remove('show'); }, 8000);
+}
+window.addEventListener('error', function(e){
+  showError('JS Error: ' + (e.message || 'unknown'));
+});
+window.addEventListener('unhandledrejection', function(e){
+  showError('Promise Error: ' + (e.reason && e.reason.message ? e.reason.message : 'unknown'));
+});
+
+/* ===== DATA ===== */
+var SONGS = [
+  { name: 'Lagu Utama', url: 'https://cdn.imageurlgenerator.com/uploads/c213d04d-a313-4f3e-b093-f32a0d4c7e78.mp3' },
+  { name: 'Lagu Santai', url: 'https://mp3tourl.com/audio/1791036208079-7a6458ef-a164-410d-9f0e-a5092d6aaede.mp3' },
+  { name: 'Lagu Semangat', url: 'https://mp3tourl.com/audio/1791036441150-5a13f719-c8bd-4265-9614-a036aa07834d.mp3' }
+];
+var currentSong = 0;
+var THEMES = ['purple','sunset','ocean','forest','neon','mono'];
+
+/* ===== STATE ===== */
+function newQ(){ return { q:'', options:['','','',''], correct:0, img:null }; }
+var quiz = { title:'', creator:'', desc:'', theme:'purple', questions:[newQ()] };
+var session = { quiz:null, idx:0, answers:[], combo:0, maxCombo:0, player:'', locked:false, bid:'', provider:'' };
+
+/* ===== HELPERS ===== */
+function $(id){ return document.getElementById(id); }
+
+function esc(s){
+  s = String(s == null ? '' : s);
+  return s.replace(/[&<>"']/g, function(c){
+    return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c];
+  });
+}
+
+function go(name){
+  var screens = document.querySelectorAll('.screen');
+  for (var i = 0; i < screens.length; i++) screens[i].classList.remove('active');
+  var target = document.getElementById('screen-' + name);
+  if (target) target.classList.add('active');
+  window.scrollTo(0, 0);
+  closeMusicPanel();
+}
+
+function toast(msg){
+  var t = $('toast');
+  if (!t) return;
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(window._toastTimer);
+  window._toastTimer = setTimeout(function(){ t.classList.remove('show'); }, 2200);
+}
+
+function encodeQuiz(obj){
+  var bytes = new TextEncoder().encode(JSON.stringify(obj));
+  var bin = '';
+  for (var i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+  return btoa(bin).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+}
+function decodeQuiz(str){
+  var s = str.replace(/-/g,'+').replace(/_/g,'/');
+  while (s.length % 4) s += '=';
+  var bin = atob(s);
+  var bytes = new Uint8Array(bin.length);
+  for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  return JSON.parse(new TextDecoder().decode(bytes));
+}
+function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
+
+/* ===== TEMA ===== */
+function applyTheme(name){
+  if (THEMES.indexOf(name) === -1) name = 'purple';
+  document.body.setAttribute('data-theme', name === 'purple' ? '' : name);
+}
+function renderThemePicker(){
+  var el = $('themeGrid');
+  if (!el) return;
+  var html = '';
+  for (var i = 0; i < THEMES.length; i++){
+    var t = THEMES[i];
+    var cls = 'theme-dot t-' + t + (quiz.theme === t ? ' active' : '');
+    html += '<div class="' + cls + '" data-theme="' + t + '"></div>';
+  }
+  el.innerHTML = html;
+  var dots = el.querySelectorAll('.theme-dot');
+  for (var j = 0; j < dots.length; j++){
+    dots[j].addEventListener('click', function(){
+      var t = this.getAttribute('data-theme');
+      quiz.theme = t;
+      applyTheme(t);
+      renderThemePicker();
+    });
+  }
+}
+
+/* ===== MUSIK ===== */
+function renderSongList(){
+  var el = $('songList');
+  if (!el) return;
+  var html = '';
+  for (var i = 0; i < SONGS.length; i++){
+    var cls = 'song-opt' + (i === currentSong ? ' active' : '');
+    html += '<button class="' + cls + '" data-song="' + i + '">' +
+            '<span class="sdot"></span><span class="sname">' + esc(SONGS[i].name) + '</span></button>';
+  }
+  el.innerHTML = html;
+  var btns = el.querySelectorAll('.song-opt');
+  for (var j = 0; j < btns.length; j++){
+    btns[j].addEventListener('click', function(){
+      var i = parseInt(this.getAttribute('data-song'), 10);
+      pickSong(i);
+    });
+  }
+}
+function pickSong(i){
+  if (i === currentSong){ closeMusicPanel(); return; }
+  currentSong = i;
+  var a = $('bgm');
+  var mb = $('musicBtn');
+  var wasPlaying = a && !a.paused;
+  if (a){ a.src = SONGS[i].url; a.load(); }
+  if (a && (wasPlaying || window._musicReady)){
+    a.play().then(function(){
+      if (mb){ mb.classList.add('playing'); mb.textContent = '🔊'; }
+    }).catch(function(){});
+  }
+  renderSongList();
+  toast('🎵 ' + SONGS[i].name);
+  closeMusicPanel();
+}
+function closeMusicPanel(){
+  var p = $('musicPanel');
+  if (p) p.classList.remove('open');
+}
+function toggleMusic(){
+  var a = $('bgm');
+  var mb = $('musicBtn');
+  if (!a) return;
+  if (a.paused){
+    a.play().then(function(){
+      if (mb){ mb.classList.add('playing'); mb.textContent = '🔊'; }
+      window._musicReady = true;
+    }).catch(function(){});
+  } else {
+    a.pause();
+    if (mb){ mb.classList.remove('playing'); mb.textContent = '🔇'; }
+  }
+}
+function tryAutoplay(){
+  var a = $('bgm');
+  var mb = $('musicBtn');
+  if (!a) return;
+  if (!a.src) a.src = SONGS[currentSong].url;
+  a.volume = 0.4;
+  a.play().then(function(){
+    window._musicReady = true;
+    if (mb){ mb.classList.add('playing'); mb.textContent = '🔊'; }
+  }).catch(function(){
+    if (mb) mb.textContent = '🎵';
+  });
+}/* ===== STORAGE — jsonblob.com ===== */
+async function createBin(){
+  try {
+    var r = await fetch('https://jsonblob.com/api/jsonBlob', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: '[]'
+    });
+    if (!r.ok) return null;
+    var id = r.headers.get('X-jsonblob') || r.headers.get('x-jsonblob');
+    if (!id){
+      var loc = r.headers.get('Location') || r.headers.get('location');
+      if (loc) id = loc.split('/').pop();
+    }
+    return id || null;
+  } catch(e){ return null; }
+}
+async function readBin(binId){
+  if (!binId) return [];
+  try {
+    var r = await fetch('https://jsonblob.com/api/jsonBlob/' + binId, {
+      headers: { 'Accept': 'application/json' }
+    });
+    if (!r.ok) return [];
+    var d = await r.json();
+    return Array.isArray(d) ? d : [];
+  } catch(e){ return []; }
+}
+async function writeBin(binId, list){
+  if (!binId) return false;
+  try {
+    var r = await fetch('https://jsonblob.com/api/jsonBlob/' + binId, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(list)
+    });
+    return r.ok;
+  } catch(e){ return false; }
+}
+
+/* ===== META ===== */
+function saveMeta(clean, binId, link){
+  try {
+    localStorage.setItem('qm_meta', JSON.stringify({
+      title: clean.title, creator: clean.creator, theme: clean.theme,
+      questions: clean.questions.map(function(q){ return { q:q.q, options:q.options, correct:q.correct }; }),
+      binId: binId || '', link: link, createdAt: Date.now()
+    }));
+  } catch(e){ toast('⚠️ Gagal simpan meta'); }
+}
+function getMeta(){
+  try { return JSON.parse(localStorage.getItem('qm_meta') || 'null'); }
+  catch(e){ return null; }
+}
+
+/* ===== BUILDER ===== */
+function renderBuilder(){
+  renderThemePicker();
+  var status = $('fb-status');
+  if (status){
+    var meta = getMeta();
+    if (meta){
+      status.innerHTML = '<div class="banner ok">📊 Kuis terakhir: <b>' + esc(meta.title) + '</b></div>';
+    } else {
+      status.innerHTML = '';
+    }
+  }
+  var wrap = $('questionsWrap');
+  if (!wrap) return;
+  var html = '';
+  for (var i = 0; i < quiz.questions.length; i++){
+    var q = quiz.questions[i];
+    html += '<div class="qcard">';
+    html += '<div class="qhead"><span class="num">Pertanyaan ' + (i+1) + '</span>';
+    if (quiz.questions.length > 1){
+      html += '<button class="btn-x" data-rm="' + i + '">✕</button>';
+    }
+    html += '</div>';
+    html += '<input class="inp" placeholder="Tulis pertanyaan..." data-q="' + i + '" value="' + esc(q.q) + '">';
+    html += '<div class="img-tools">';
+    html += '<button class="img-btn' + (q.img ? ' has' : '') + '" data-img="' + i + '">' + (q.img ? '🖼️ Ganti Foto' : '📷 Tambah Foto') + '</button>';
+    html += '</div>';
+    if (q.img){
+      html += '<div class="img-preview"><img src="' + q.img + '"><button class="rm" data-rmimg="' + i + '">✕</button></div>';
+    }
+    html += '<div class="opts">';
+    for (var j = 0; j < q.options.length; j++){
+      html += '<div class="opt-row">';
+      html += '<button class="check' + (q.correct === j ? ' active' : '') + '" data-correct="' + i + '|' + j + '">' + (q.correct === j ? '✓' : '') + '</button>';
+      html += '<input class="inp" placeholder="Opsi ' + (j+1) + '" data-opt="' + i + '|' + j + '" value="' + esc(q.options[j]) + '">';
+      html += '</div>';
+    }
+    html += '</div></div>';
+  }
+  wrap.innerHTML = html;
+
+  /* pasang event listener ke semua elemen */
+  wrap.querySelectorAll('[data-q]').forEach(function(el){
+    el.addEventListener('input', function(){
+      var i = parseInt(this.getAttribute('data-q'), 10);
+      quiz.questions[i].q = this.value;
+    });
+  });
+  wrap.querySelectorAll('[data-opt]').forEach(function(el){
+    el.addEventListener('input', function(){
+      var p = this.getAttribute('data-opt').split('|');
+      var i = parseInt(p[0], 10), j = parseInt(p[1], 10);
+      quiz.questions[i].options[j] = this.value;
+    });
+  });
+  wrap.querySelectorAll('[data-correct]').forEach(function(el){
+    el.addEventListener('click', function(){
+      var p = this.getAttribute('data-correct').split('|');
+      var i = parseInt(p[0], 10), j = parseInt(p[1], 10);
+      quiz.questions[i].correct = j;
+      renderBuilder();
+    });
+  });
+  wrap.querySelectorAll('[data-rm]').forEach(function(el){
+    el.addEventListener('click', function(){
+      var i = parseInt(this.getAttribute('data-rm'), 10);
+      quiz.questions.splice(i, 1);
+      renderBuilder();
+    });
+  });
+  wrap.querySelectorAll('[data-img]').forEach(function(el){
+    el.addEventListener('click', function(){
+      var i = parseInt(this.getAttribute('data-img'), 10);
+      pickImage(i);
+    });
+  });
+  wrap.querySelectorAll('[data-rmimg]').forEach(function(el){
+    el.addEventListener('click', function(){
+      var i = parseInt(this.getAttribute('data-rmimg'), 10);
+      quiz.questions[i].img = null;
+      renderBuilder();
+    });
+  });
+}
+function addQ(){
+  if (quiz.questions.length >= 20) return toast('Maksimal 20 pertanyaan');
+  quiz.questions.push(newQ());
+  renderBuilder();
+}
+function fillExample(){
+  if (quiz.questions.some(function(q){ return q.q.trim() || q.options.some(function(o){ return o.trim(); }); })){
+    if (!confirm('Isi contoh akan menimpa soal yang ada. Lanjut?')) return;
+  }
+  quiz.title = 'Seberapa Kenal Kamu Sama Aku?';
+  if (!quiz.creator) quiz.creator = 'Zikri';
+  quiz.desc = 'Jawab 5 pertanyaan ini dan lihat seberapa dekat kamu sama aku 👀';
+  quiz.questions = [
+    { q:'Apa makanan favorit aku?', options:['Nasi Goreng','Mie Ayam','Sushi','Bakso'], correct:1, img:null },
+    { q:'Kapan ulang tahun aku?', options:['12 Januari','3 Maret','27 Agustus','9 Desember'], correct:2, img:null },
+    { q:'Aku paling takut sama apa?', options:['Ketinggian','Kucing','Gelap','Ketinggalan momen'], correct:3, img:null },
+    { q:'Hobi aku yang paling sering?', options:['Main game','Dengerin musik','Baca buku','Olahraga'], correct:1, img:null },
+    { q:'Kalau aku sedih, aku biasanya...', options:['Diam aja','Cari teman','Tidur','Makan banyak'], correct:0, img:null }
+  ];
+  $('in-title').value = quiz.title;
+  $('in-creator').value = quiz.creator;
+  $('in-desc').value = quiz.desc;
+  renderBuilder();
+  toast('✓ Contoh soal dimuat!');
+}
+
+/* ===== FOTO ===== */
+function pickImage(qi){
+  var input = document.createElement('input');
+  input.type = 'file';
+  input.accept = 'image/*';
+  input.onchange = function(){
+    var file = input.files[0];
+    if (!file) return;
+    if (file.size > 8 * 1024 * 1024){ toast('⚠️ Foto maksimal 8MB'); return; }
+    var reader = new FileReader();
+    reader.onload = function(e){
+      var img = new Image();
+      img.onload = function(){
+        var w = img.width, h = img.height;
+        var maxDim = 600;
+        if (w > h && w > maxDim){ h = h * maxDim / w; w = maxDim; }
+        else if (h > maxDim){ w = w * maxDim / h; h = maxDim; }
+        var canvas = document.createElement('canvas');
+        canvas.width = w; canvas.height = h;
+        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        quiz.questions[qi].img = canvas.toDataURL('image/jpeg', 0.7);
+        renderBuilder();
+        toast('✓ Foto ditambahkan');
+      };
+      img.onerror = function(){ toast('⚠️ Gagal load foto'); };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  };
+  input.click();
+}
+
+/* ===== GENERATE LINK ===== */
+async function generate(){
+  if (!quiz.title.trim()) return toast('⚠️ Isi judul kuis dulu');
+  if (!quiz.creator.trim()) return toast('⚠️ Isi nama kamu dulu');
+  for (var i = 0; i < quiz.questions.length; i++){
+    var q = quiz.questions[i];
+    if (!q.q.trim()) return toast('⚠️ Pertanyaan ' + (i+1) + ' masih kosong');
+    if (q.options.filter(function(o){ return o.trim(); }).length < 2) return toast('⚠️ Pertanyaan ' + (i+1) + ' butuh minimal 2 opsi');
+    if (!q.options[q.correct] || !q.options[q.correct].trim()) return toast('⚠️ Tandai jawaban benar di pertanyaan ' + (i+1));
+  }
+
+  var btn = $('genBtn');
+  btn.disabled = true;
+  btn.textContent = '⏳ Membuat leaderboard...';
+
+  var clean = {
+    title: quiz.title.trim(),
+    creator: quiz.creator.trim(),
+    desc: quiz.desc.trim(),
+    theme: quiz.theme || 'purple',
+    questions: quiz.questions.map(function(q){
+      var opts = q.options.map(function(o){ return o.trim(); }).filter(Boolean);
+      var correctText = q.options[q.correct].trim();
+      var correct = opts.indexOf(correctText);
+      if (correct < 0) correct = 0;
+      var out = { q: q.q.trim(), options: opts, correct: correct };
+      if (q.img) out.img = q.img;
+      return out;
+    })
+  };
+
+  var binId = await createBin();
+  var encoded = encodeQuiz(clean);
+  var base = location.origin + location.pathname;
+  var link = binId ? (base + '#q=' + encoded + '&bid=' + binId) : (base + '#q=' + encoded);
+
+  $('share-link').value = link;
+  $('pv-title').textContent = clean.title;
+  $('pv-meta').textContent = 'oleh ' + clean.creator + ' • ' + clean.questions.length + ' pertanyaan';
+
+  var statusEl = $('share-status');
+  if (binId){
+    statusEl.innerHTML = '<div class="banner ok">🌐 Leaderboard <b>GLOBAL</b> siap! Semua yang buka link ini masuk ke leaderboard yang sama.</div>';
+  } else {
+    statusEl.innerHTML = '<div class="banner err">⚠️ Server gak kejangkau. Klik "Buat Link Kuis" lagi 5 detik kemudian.</div>';
+  }
+
+  var waText = encodeURIComponent('🧩 Aku bikin kuis nih: "' + clean.title + '"\n\nCoba kerjakan ya 👇\n' + link);
+  $('wa-btn').href = 'https://wa.me/?text=' + waText;
+
+  saveMeta(clean, binId, link);
+
+  btn.disabled = false;
+  btn.textContent = '🚀 Buat Link Kuis';
+  go('share');
+}
+function copyLink(){
+  var inp = $('share-link');
+  var done = function(){ toast('✓ Link disalin!'); };
+  if (navigator.clipboard && window.isSecureContext){
+    navigator.clipboard.writeText(inp.value).then(done).catch(function(){
+      inp.select(); inp.setSelectionRange(0,99999); document.execCommand('copy'); done();
+    });
+  } else {
+    inp.select(); inp.setSelectionRange(0,99999); document.execCommand('copy'); done();
+  }
+}/* ===== QUIZ FLOW ===== */
+function startQuiz(data, bid, fromName){
+  session.quiz = data;
+  session.idx = 0;
+  session.answers = [];
+  session.combo = 0;
+  session.maxCombo = 0;
+  session.locked = false;
+  session.bid = bid || '';
+  if (fromName) { /* nama sudah diset */ } else { session.player = ''; }
+  applyTheme(data.theme || 'purple');
+  go('quiz');
+  renderQuestion();
+}
+function startFromName(){
+  var name = ($('player-name').value || '').trim();
+  if (name.length < 2) return toast('⚠️ Nama minimal 2 huruf');
+  session.player = name.slice(0, 24);
+  startQuiz(session.quiz, session.bid, true);
+}
+function renderQuestion(){
+  var qz = session.quiz;
+  var q = qz.questions[session.idx];
+  var total = qz.questions.length;
+  var pct = Math.round((session.idx / total) * 100);
+  $('pg-label').textContent = 'Soal ' + (session.idx + 1) + '/' + total + ' • ' + session.player;
+  $('pg-pct').textContent = pct + '%';
+  $('pg-fill').style.width = pct + '%';
+  $('quiz-by').textContent = 'Kuis oleh ' + qz.creator;
+  $('combo-slot').innerHTML = session.combo >= 2 ? '<span class="combo-tag">🔥 x' + session.combo + '</span>' : '';
+  $('q-img-wrap').innerHTML = q.img ? '<div class="q-img"><img src="' + q.img + '"></div>' : '';
+  $('q-text').textContent = q.q;
+  var letters = ['A','B','C','D','E','F'];
+  var html = '';
+  for (var i = 0; i < q.options.length; i++){
+    html += '<button class="choice" data-i="' + i + '">' +
+            '<span class="badge">' + (letters[i] || (i+1)) + '</span><span>' + esc(q.options[i]) + '</span></button>';
+  }
+  $('q-choices').innerHTML = html;
+  $('q-choices').querySelectorAll('.choice').forEach(function(el){
+    el.addEventListener('click', function(){
+      pick(parseInt(this.getAttribute('data-i'), 10));
+    });
+  });
+  $('next-btn').style.display = 'none';
+  $('next-btn').textContent = (session.idx === total - 1) ? 'Lihat Hasil 🎉' : 'Lanjut →';
+  session.locked = false;
+}
+function pick(i){
+  if (session.locked) return;
+  session.locked = true;
+  session.answers[session.idx] = i;
+  var q = session.quiz.questions[session.idx];
+  var ok = (i === q.correct);
+  var choices = $('q-choices').querySelectorAll('.choice');
+  choices.forEach(function(el, k){
+    el.classList.add('locked');
+    if (k === i) el.classList.add(ok ? 'correct' : 'wrong');
+    if (!ok && k === q.correct) setTimeout(function(){ el.classList.add('correct'); }, 200);
+    if (k !== i && k !== q.correct) el.style.opacity = '.4';
+  });
+  if (ok){
+    playTing();
+    session.combo++;
+    if (session.combo > session.maxCombo) session.maxCombo = session.combo;
+    if (session.combo === 3){ playCombo(); showFX('🔥 COMBO x3!'); }
+    else if (session.combo > 3 && session.combo % 3 === 0){ playCombo(); showFX('⚡ x' + session.combo + '!'); }
+    else showFX(pickEmoji());
+  } else {
+    playBuzz();
+    session.combo = 0;
+    showFX('💔');
+  }
+  $('combo-slot').innerHTML = session.combo >= 2 ? '<span class="combo-tag">🔥 x' + session.combo + '</span>' : '';
+  $('next-btn').style.display = 'inline-flex';
+}
+function pickEmoji(){
+  var pool = ['🎉','✨','🌟','💫','🎊','⭐','🥳','🌈'];
+  return pool[Math.floor(Math.random() * pool.length)];
+}
+function showFX(text){
+  var el = document.createElement('div');
+  el.className = 'fx-emoji';
+  el.textContent = text;
+  if (text.length > 3){ el.style.fontSize = '28px'; el.style.fontWeight = '800'; }
+  el.style.left = (window.innerWidth / 2 + (Math.random() - .5) * 100) + 'px';
+  el.style.top = (window.innerHeight / 2 + (Math.random() - .5) * 70) + 'px';
+  document.body.appendChild(el);
+  setTimeout(function(){
+    el.style.transform = 'translate(-50%,-140%) scale(.8)';
+    el.style.opacity = '0';
+  }, 30);
+  setTimeout(function(){ el.remove(); }, 1100);
+}
+function nextQ(){
+  if (session.answers[session.idx] === undefined) return;
+  if (session.idx < session.quiz.questions.length - 1){
+    session.idx++;
+    renderQuestion();
+    window.scrollTo(0, 0);
+  } else {
+    showResult();
+  }
+}
+
+/* ===== AUDIO SFX ===== */
+var audioCtx = null;
+function getCtx(){
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+  return audioCtx;
+}
+function playTing(){
+  try {
+    var ctx = getCtx(), now = ctx.currentTime;
+    [880, 1318.5].forEach(function(f, i){
+      var o = ctx.createOscillator(), g = ctx.createGain();
+      o.type = 'sine'; o.frequency.setValueAtTime(f, now);
+      o.connect(g); g.connect(ctx.destination);
+      g.gain.setValueAtTime(0, now);
+      g.gain.linearRampToValueAtTime(0.15, now + 0.01 + i*0.05);
+      g.gain.exponentialRampToValueAtTime(0.001, now + 0.3 + i*0.05);
+      o.start(now + i*0.05); o.stop(now + 0.4 + i*0.05);
+    });
+  } catch(e){}
+}
+function playBuzz(){
+  try {
+    var ctx = getCtx(), now = ctx.currentTime;
+    var o = ctx.createOscillator(), g = ctx.createGain();
+    o.type = 'sawtooth'; o.frequency.setValueAtTime(140, now);
+    o.frequency.exponentialRampToValueAtTime(70, now + 0.22);
+    o.connect(g); g.connect(ctx.destination);
+    g.gain.setValueAtTime(0.1, now);
+    g.gain.exponentialRampToValueAtTime(0.001, now + 0.26);
+    o.start(now); o.stop(now + 0.26);
+  } catch(e){}
+}
+function playCombo(){
+  try {
+    var ctx = getCtx(), now = ctx.currentTime;
+    [523.25, 659.25, 783.99, 1046.5].forEach(function(f, i){
+      var o = ctx.createOscillator(), g = ctx.createGain();
+      o.type = 'triangle'; o.frequency.setValueAtTime(f, now + i*0.055);
+      o.connect(g); g.connect(ctx.destination);
+      g.gain.setValueAtTime(0, now + i*0.055);
+      g.gain.linearRampToValueAtTime(0.13, now + i*0.055 + 0.01);
+      g.gain.exponentialRampToValueAtTime(0.001, now + i*0.055 + 0.18);
+      o.start(now + i*0.055); o.stop(now + i*0.055 + 0.22);
+    });
+  } catch(e){}
+}
+
+/* ===== HASIL ===== */
+function getVerdict(pct){
+  if (pct === 100) return { e:'🏆', t:'Sempurna!', d:'Semua benar. Luar biasa!' };
+  if (pct >= 80)   return { e:'🌟', t:'Keren Banget!', d:'Hampir sempurna!' };
+  if (pct >= 60)   return { e:'💪', t:'Bagus!', d:'Lumayan paham!' };
+  if (pct >= 40)   return { e:'🤔', t:'Lumayan...', d:'Masih ada yang salah.' };
+  if (pct >= 20)   return { e:'😅', t:'Waduh...', d:'Perlu coba lagi.' };
+  return { e:'💀', t:'Yah...', d:'Belum kenal sama sekali 😂' };
+}
+async function showResult(){
+  var qz = session.quiz;
+  var total = qz.questions.length;
+  var correct = 0;
+  for (var i = 0; i < total; i++){
+    if (session.answers[i] === qz.questions[i].correct) correct++;
+  }
+  var pct = Math.round((correct / total) * 100);
+  var v = getVerdict(pct);
+
+  $('score-circle').style.setProperty('--p', pct + '%');
+  $('score-num').textContent = pct + '%';
+  $('vd-emoji').textContent = v.e;
+  $('vd-title').textContent = v.t;
+  $('vd-desc').textContent = v.d + ' (' + correct + '/' + total + ' benar • combo max x' + session.maxCombo + ')';
+
+  var revHtml = '';
+  for (var j = 0; j < total; j++){
+    var q = qz.questions[j];
+    var ok = (session.answers[j] === q.correct);
+    var yourAns = q.options[session.answers[j]];
+    if (yourAns === undefined) yourAns = '(tidak dijawab)';
+    var correctAns = q.options[q.correct] || '-';
+    revHtml += '<div class="review-item">' +
+      '<div class="mark ' + (ok ? 'ok' : 'no') + '">' + (ok ? '✓' : '✕') + '</div>' +
+      '<div style="flex:1">' +
+      '<div class="rq">' + esc(q.q) + '</div>' +
+      '<div class="ra">Jawabanmu: <strong style="color:' + (ok ? '#4ade80' : '#f87171') + '">' + esc(yourAns) + '</strong>' +
+      (ok ? '' : '<br>Yang benar: <strong style="color:#4ade80">' + esc(correctAns) + '</strong>') +
+      '</div></div></div>';
+  }
+  $('review').innerHTML = revHtml;
+  go('result');
+
+  $('lb-list').innerHTML = '<div class="spinner"></div>';
+  $('lb-note').textContent = 'Mengirim skor...';
+
+  var entry = {
+    id: uid(),
+    name: session.player,
+    pct: pct,
+    correct: correct,
+    total: total,
+    combo: session.maxCombo,
+    time: Date.now(),
+    answers: session.answers.slice()
+  };
+
+  /* simpan lokal dulu (biar aman) */
+  try {
+    var key = 'qm_lb_' + (session.bid || 'nobin');
+    var local = JSON.parse(localStorage.getItem(key) || '[]');
+    local.push(entry);
+    localStorage.setItem(key, JSON.stringify(local.slice(-100)));
+  } catch(e){}
+
+  /* kirim ke server */
+  var sent = false;
+  if (session.bid){
+    var list = await readBin(session.bid);
+    if (!Array.isArray(list)) list = [];
+    list.push(entry);
+    sent = await writeBin(session.bid, list);
+  }
+
+  $('lb-note').textContent = sent
+    ? '🌐 Skor terkirim ke leaderboard global!'
+    : '⚠️ Mode lokal — skor tetap tersimpan di device ini.';
+
+  await renderLeaderboard(session.player);
+}
+async function loadAll(){
+  var serverList = [];
+  if (session.bid){
+    serverList = await readBin(session.bid);
+    if (!Array.isArray(serverList)) serverList = [];
+  }
+  var localList = [];
+  try {
+    localList = JSON.parse(localStorage.getItem('qm_lb_' + (session.bid || 'nobin')) || '[]');
+  } catch(e){}
+  var map = {};
+  serverList.forEach(function(e){ map[e.id || (e.name + '|' + e.time)] = e; });
+  localList.forEach(function(e){ var k = e.id || (e.name + '|' + e.time); if (!map[k]) map[k] = e; });
+  var all = Object.keys(map).map(function(k){ return map[k]; });
+  all.sort(function(a,b){ return (b.pct - a.pct) || (b.combo - a.combo) || (a.time - b.time); });
+  return all;
+}
+async function renderLeaderboard(currentName){
+  var list = await loadAll();
+  var el = $('lb-list');
+  if (!list.length){
+    el.innerHTML = '<p class="hint">Belum ada yang selesai. Kamu yang pertama! 🎉</p>';
+    return;
+  }
+  var top = list.slice(0, 10);
+  var icons = ['🥇','🥈','🥉'];
+  var html = '';
+  for (var i = 0; i < top.length; i++){
+    var e = top[i];
+    var isMe = (e.name === currentName);
+    var rankCls = (i < 3) ? 'g' + (i+1) : '';
+    html += '<div class="lb-row' + (isMe ? ' me' : '') + '">' +
+      '<div class="lb-rank ' + rankCls + '">' + (i < 3 ? icons[i] : (i+1)) + '</div>' +
+      '<div class="lb-name">' + esc(e.name) + (isMe ? ' <span style="font-size:10px;color:#22d3ee;font-weight:800">(KAMU)</span>' : '') +
+      '<div class="lb-meta">' + e.correct + '/' + e.total + ' benar • combo x' + e.combo + ' • ' + timeAgo(e.time) + '</div>' +
+      '</div><div class="lb-score">' + e.pct + '%</div></div>';
+  }
+  el.innerHTML = html;
+}
+function timeAgo(ts){
+  var s = Math.floor((Date.now() - ts) / 1000);
+  if (s < 60) return 'baru aja';
+  if (s < 3600) return Math.floor(s/60) + 'm lalu';
+  if (s < 86400) return Math.floor(s/3600) + 'j lalu';
+  return Math.floor(s/86400) + 'h lalu';
+}
+async function refreshLB(){
+  $('lb-list').innerHTML = '<div class="spinner"></div>';
+  await renderLeaderboard(session.player);
+  toast('✓ Leaderboard di-refresh');
+}
+
+/* ===== ANALYTICS ===== */
+async function openAnalytics(){
+  var meta = getMeta();
+  if (!meta) return toast('⚠️ Belum ada kuis yang dibuat');
+  go('analytics');
+  $('an-list').innerHTML = '<div class="spinner"></div>';
+  $('an-stats').innerHTML = '';
+  $('an-questions').innerHTML = '';
+  await renderAnalytics(meta);
+}
+async function renderAnalytics(meta){
+  var list = [];
+  if (meta.binId) list = await readBin(meta.binId);
+  if (!Array.isArray(list)) list = [];
+  /* merge lokal */
+  try {
+    var local = JSON.parse(localStorage.getItem('qm_lb_' + (meta.binId || 'nobin')) || '[]');
+    var map = {};
+    list.forEach(function(e){ map[e.id || (e.name + '|' + e.time)] = e; });
+    local.forEach(function(e){ var k = e.id || (e.name + '|' + e.time); if (!map[k]) map[k] = e; });
+    list = Object.keys(map).map(function(k){ return map[k]; });
+  } catch(e){}
+  list.sort(function(a,b){ return (b.pct - a.pct) || (b.combo - a.combo) || (a.time - b.time); });
+
+  if (!list.length){
+    $('an-stats').innerHTML = '';
+    $('an-questions').innerHTML = '';
+    $('an-list').innerHTML = '<div class="empty-state"><span class="e">📭</span>Belum ada yang main.<br>Kirim link ke temanmu dulu ya!</div>';
+    return;
+  }
+
+  var avg = Math.round(list.reduce(function(s,e){ return s + e.pct; }, 0) / list.length);
+  var best = list[0].pct;
+  $('an-stats').innerHTML =
+    '<div class="an-stat-row">' +
+    '<div class="an-stat"><div class="n">' + list.length + '</div><div class="l">Peserta</div></div>' +
+    '<div class="an-stat"><div class="n">' + avg + '%</div><div class="l">Rata-rata</div></div>' +
+    '<div class="an-stat"><div class="n">' + best + '%</div><div class="l">Tertinggi</div></div>' +
+    '</div>';
+
+  var qHtml = '<div class="card" style="margin-bottom:14px">' +
+    '<div style="font-size:13px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:12px">🔥 Soal Paling Sering Salah</div>';
+  for (var qi = 0; qi < meta.questions.length; qi++){
+    var q = meta.questions[qi];
+    var wrong = 0, answered = 0;
+    list.forEach(function(e){
+      if (Array.isArray(e.answers) && e.answers[qi] !== undefined){
+        answered++;
+        if (e.answers[qi] !== q.correct) wrong++;
+      }
+    });
+    var pctW = answered ? Math.round((wrong / answered) * 100) : 0;
+    qHtml += '<div class="qstat">' +
+      '<div class="qt">' + (qi+1) + '. ' + esc(q.q) + '</div>' +
+      '<div class="qb"><div class="qf" style="width:' + pctW + '%"></div></div>' +
+      '<div class="qd">' + wrong + ' dari ' + answered + ' salah (' + pctW + '%)</div></div>';
+  }
+  qHtml += '</div>';
+  $('an-questions').innerHTML = qHtml;
+
+  var icons = ['🥇','🥈','🥉'];
+  var listHtml = '<div style="font-size:13px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin:6px 0 10px">👥 Semua Peserta</div>';
+  for (var i = 0; i < list.length; i++){
+    var e = list[i];
+    var rankCls = (i < 3) ? 'g' + (i+1) : '';
+    var detailHtml = '';
+    for (var k = 0; k < meta.questions.length; k++){
+      var mk = meta.questions[k];
+      var userAns = (Array.isArray(e.answers)) ? e.answers[k] : undefined;
+      if (userAns === undefined) continue;
+      var okA = (userAns === mk.correct);
+      var yourText = mk.options[userAns] || '(kosong)';
+      var corrText = mk.options[mk.correct] || '-';
+      detailHtml += '<div class="an-qa ' + (okA ? 'ok' : 'no') + '">' +
+        '<div class="mk">' + (okA ? '✓' : '✕') + '</div>' +
+        '<div style="flex:1"><div class="q">' + esc(mk.q) + '</div>' +
+        '<div class="a">Jawab: <strong style="color:' + (okA ? '#4ade80' : '#f87171') + '">' + esc(yourText) + '</strong>' +
+        (okA ? '' : ' • Benar: <strong style="color:#4ade80">' + esc(corrText) + '</strong>') +
+        '</div></div></div>';
+    }
+    if (!detailHtml) detailHtml = '<div class="hint" style="padding:10px 0">Detail jawaban gak tersedia.</div>';
+
+    listHtml += '<div class="an-row" id="an-' + (e.id || i) + '">' +
+      '<div class="an-head" data-toggle="' + (e.id || i) + '">' +
+      '<div class="an-rank ' + rankCls + '">' + (i < 3 ? icons[i] : (i+1)) + '</div>' +
+      '<div class="an-name">' + esc(e.name) +
+      '<div class="sub">' + e.correct + '/' + e.total + ' benar • combo x' + e.combo + ' • ' + timeAgo(e.time) + '</div>' +
+      '</div><div class="an-score">' + e.pct + '%</div>' +
+      '<div class="an-arrow">▼</div></div>' +
+      '<div class="an-body">' +
+      '<button class="an-btn danger" data-del="' + (e.id || i) + '">🗑️ Hapus Peserta Ini</button>' +
+      detailHtml +
+      '</div></div>';
+  }
+  listHtml += '<button class="btn btn-ghost" id="btnClearAll" style="margin-top:14px;color:#fca5a5;border-color:rgba(239,68,68,.35)">🗑️ Hapus Semua Peserta</button>';
+  listHtml += '<button class="btn btn-ghost" id="btnRefreshAn" style="margin-top:10px">🔄 Refresh</button>';
+  $('an-list').innerHTML = listHtml;
+
+  /* event listeners */
+  $('an-list').querySelectorAll('[data-toggle]').forEach(function(el){
+    el.addEventListener('click', function(){
+      var id = this.getAttribute('data-toggle');
+      var row = document.getElementById('an-' + id);
+      if (row) row.classList.toggle('open');
+    });
+  });
+  $('an-list').querySelectorAll('[data-del]').forEach(function(el){
+    el.addEventListener('click', function(ev){
+      ev.stopPropagation();
+      var id = this.getAttribute('data-del');
+      deleteEntry(id);
+    });
+  });
+  var clr = $('btnClearAll');
+  if (clr) clr.addEventListener('click', clearAllEntries);
+  var rfs = $('btnRefreshAn');
+  if (rfs) rfs.addEventListener('click', openAnalytics);
+}
+async function deleteEntry(id){
+  if (!confirm('Hapus data peserta ini?')) return;
+  var meta = getMeta();
+  if (!meta) return;
+  var list = [];
+  if (meta.binId) list = await readBin(meta.binId);
+  if (!Array.isArray(list)) list = [];
+  list = list.filter(function(e){ return (e.id || '') !== id; });
+  if (meta.binId) await writeBin(meta.binId, list);
+  /* hapus lokal juga */
+  try {
+    var key = 'qm_lb_' + (meta.binId || 'nobin');
+    var local = JSON.parse(localStorage.getItem(key) || '[]');
+    localStorage.setItem(key, JSON.stringify(local.filter(function(e){ return (e.id || '') !== id; })));
+  } catch(e){}
+  toast('🗑️ Peserta dihapus');
+  await renderAnalytics(meta);
+}
+async function clearAllEntries(){
+  if (!confirm('Hapus SEMUA peserta?')) return;
+  var meta = getMeta();
+  if (!meta) return;
+  if (meta.binId) await writeBin(meta.binId, []);
+  try { localStorage.setItem('qm_lb_' + (meta.binId || 'nobin'), '[]'); } catch(e){}
+  toast('🗑️ Semua peserta dihapus');
+  await renderAnalytics(meta);
+}
+
+/* ===== MISC ===== */
+function testQuiz(){
+  var shareVal = $('share-link').value;
+  var url = shareVal || location.href;
+  var parts = url.split('#');
+  if (parts.length < 2) return toast('⚠️ Buat link dulu');
+  var params = new URLSearchParams(parts[1]);
+  var qEnc = params.get('q');
+  var bid = params.get('bid') || '';
+  if (!qEnc) return toast('⚠️ Link kuis gak valid');
+  try {
+    var data = decodeQuiz(qEnc);
+    openNameScreen(data, bid);
+  } catch(e){ toast('⚠️ Gagal buka kuis'); }
+}
+function openNameScreen(data, bid){
+  session.quiz = data;
+  session.bid = bid || '';
+  applyTheme(data.theme || 'purple');
+  $('name-quiz-title').textContent = 'Kuis: "' + data.title + '" oleh ' + data.creator;
+  $('player-name').value = '';
+  go('name');
+  setTimeout(function(){ $('player-name').focus(); }, 350);
+}
+function resetAll(){
+  history.replaceState(null, '', location.pathname);
+  quiz = { title:'', creator:'', desc:'', theme:'purple', questions:[newQ()] };
+  $('in-title').value = '';
+  $('in-creator').value = '';
+  $('in-desc').value = '';
+  applyTheme('purple');
+  renderBuilder();
+  go('builder');
+}
+function loadDemoAndGo(){
+  fillExample();
+  go('builder');
+  toast('👀 Contoh soal udah dimuat!');
+}
+
+/* ===== PASANG EVENT LISTENER TOMBOL ===== */
+function bindUI(){
+  $('btnStart').addEventListener('click', function(){ go('builder'); });
+  $('btnDemo').addEventListener('click', loadDemoAndGo);
+  $('btnBackHome').addEventListener('click', function(){ go('home'); });
+  $('btnBackBuilder2').addEventListener('click', function(){ go('builder'); });
+  $('btnBackBuilder3').addEventListener('click', function(){ go('builder'); });
+  $('btnFillEx').addEventListener('click', fillExample);
+  $('btnAddQ').addEventListener('click', addQ);
+  $('genBtn').addEventListener('click', generate);
+  $('btnAnalytics').addEventListener('click', openAnalytics);
+  $('btnCopy').addEventListener('click', copyLink);
+  $('btnTest').addEventListener('click', testQuiz);
+  $('btnStartPlay').addEventListener('click', startFromName);
+  $('next-btn').addEventListener('click', nextQ);
+  $('btnRefreshLB').addEventListener('click', refreshLB);
+  $('btnReset').addEventListener('click', resetAll);
+  $('musicBtn').addEventListener('click', toggleMusic);
+  $('btnMusicPick').addEventListener('click', function(e){
+    e.stopPropagation();
+    var p = $('musicPanel');
+    if (p) p.classList.toggle('open');
+  });
+
+  /* input form */
+  $('in-title').addEventListener('input', function(){ quiz.title = this.value; });
+  $('in-creator').addEventListener('input', function(){ quiz.creator = this.value; });
+  $('in-desc').  $('in-desc').addEventListener('input', function(){ quiz.desc = this.value; });
+  $('player-name').addEventListener('keydown', function(e){
+    if (e.key === 'Enter') startFromName();
+  });
+
+  /* tutup music panel saat klik luar */
+  document.addEventListener('click', function(e){
+    var p = $('musicPanel');
+    if (!p) return;
+    if (!p.classList.contains('open')) return;
+    if (p.contains(e.target)) return;
+    if (e.target.closest && e.target.closest('#btnMusicPick')) return;
+    p.classList.remove('open');
+  });
+
+  /* coba autoplay musik saat klik pertama */
+  document.addEventListener('click', function onFirst(){
+    if (!window._musicReady) tryAutoplay();
+  }, { once: false });
+}
+
+/* ===== INIT ===== */
+window.addEventListener('load', function(){
+  try {
+    bindUI();
+    var a = $('bgm');
+    if (a) a.src = SONGS[currentSong].url;
+    renderSongList();
+
+    /* cek URL hash — kalau ada #q=... berarti buka kuis */
+    if (location.hash.length > 1){
+      var params = new URLSearchParams(location.hash.slice(1));
+      var qEnc = params.get('q');
+      var bid = params.get('bid') || '';
+      if (qEnc){
+        try {
+          var data = decodeQuiz(qEnc);
+          if (!data || !data.questions || !data.questions.length) throw new Error('bad');
+          openNameScreen(data, bid);
+          return;
+        } catch(e){
+          alert('Link kuis tidak valid 😔');
+        }
+      }
+    }
+
+    applyTheme('purple');
+    renderBuilder();
+  } catch(e){
+    showError('Init: ' + e.message);
+  }
+});
+</script>
+</body>
+</html>
